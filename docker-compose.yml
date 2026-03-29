@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+
+  vector-engine:
+    build:
+      context: ./rust-engine
+      dockerfile: Dockerfile
+    ports:
+      - "50051:50051"
+    depends_on:
+      - qdrant
+    environment:
+      - QDRANT_ADDR=qdrant:6334
+
+  api-service:
+    build:
+      context: ./services
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - vector-engine
+      - qdrant
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - VECTOR_ENGINE_ADDR=vector-engine:50051
+      - QDRANT_ADDR=qdrant:6334
+
+volumes:
+  qdrant_storage:

@@ -1,0 +1,26 @@
+# Environment
+.env
+
+# Go
+services/bin/
+services/vendor/
+
+# Rust
+rust-engine/target/
+rust-engine/Cargo.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Docker
+docker-compose.override.yml

@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package vectorservice;
+
+service VectorService {
+  rpc Embed(EmbedRequest) returns (EmbedResponse);
+  rpc Search(SearchRequest) returns (SearchResponse);
+}
+
+message EmbedRequest {
+  string text = 1;
+}
+
+message EmbedResponse {
+  repeated float vector = 1;
+}
+
+message SearchRequest {
+  string collection = 1;
+  repeated float query_vector = 2;
+  int32 limit = 3;
+}
+
+message SearchResponse {
+  repeated SearchMatch matches = 1;
+}
+
+message SearchMatch {
+  string id = 1;
+  float score = 2;
+  string payload = 3;
+}
